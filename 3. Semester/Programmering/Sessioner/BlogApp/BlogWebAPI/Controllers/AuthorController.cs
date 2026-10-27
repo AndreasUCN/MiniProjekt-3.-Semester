@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogWebAPI.DTO;
 using DataAccess.Repositories;
-using System.Runtime.InteropServices;
-using Microsoft.Extensions.Configuration;
 
 namespace BlogWebAPI.Controllers;
 
@@ -10,49 +8,89 @@ namespace BlogWebAPI.Controllers;
 [Route("api/[controller]")]
 public class AuthorsController : ControllerBase
 {
-    IAuthorDAO _authorDAO;
+    private readonly IAuthorDAO _authorDAO;
 
     public AuthorsController(IConfiguration configuration)
     {
-        _authorDAO = new AuthorDAO(configuration.GetConnectionString("DefaultConnection"));
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteAuthor(int id)
-    {
-        throw new NotImplementedException();
+        _authorDAO = new AuthorDAO(
+            configuration.GetConnectionString("DefaultConnection"));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetAuthor(int id)
+    public async Task<ActionResult<AuthorDto>> GetAuthor(int id)
     {
-        throw new NotImplementedException();
+        var author = await _authorDAO.GetByIdAsync(id);
+
+        if (author == null)
+            return NotFound();
+
+        return Ok(author.ToDto());
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAsync()
     {
-        throw new NotImplementedException();
+        var authors = await _authorDAO.GetAllAsync();
+
+        return Ok(authors.Select(a => a.ToDto()));
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] AuthorDto newAuthorDto)
+    public async Task<ActionResult<int>> Post([FromBody] AuthorDto newAuthorDto)
     {
-        throw new NotImplementedException();
+        int id = await _authorDAO.CreateAsync(
+            newAuthorDto.FromDto(),
+            newAuthorDto.Password);
+
+        return Ok(id);
     }
 
-
-    [HttpPut]
-
-    public async Task<ActionResult> Put(int id, [FromBody] AuthorDto authorDtoToUpdate)
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Put(
+    int id,
+    [FromBody] AuthorDto authorDtoToUpdate)
     {
-        throw new NotImplementedException();
+        var existingAuthor = await _authorDAO.GetByIdAsync(id);
+
+        if (existingAuthor == null)
+            return NotFound();
+
+        var author = authorDtoToUpdate.FromDto();
+        author.Id = id;
+
+        await _authorDAO.UpdateAsync(author);
+
+        return Ok();
     }
 
-    [HttpPost]
-    public async Task<ActionResult> UpdatePassword(int id, [FromBody] AuthorDto passwordUpdateInfo)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAuthor(int id)
     {
-        throw new NotImplementedException();
+        var author = await _authorDAO.GetByIdAsync(id);
 
+        if (author == null)
+            return NotFound();
+
+        await _authorDAO.DeleteAsync(id);
+
+        return Ok();
+    }
+
+    [HttpPost("{id}/password")]
+    public async Task<ActionResult> UpdatePassword(
+    int id,
+    [FromBody] AuthorDto passwordUpdateInfo)
+    {
+        var author = await _authorDAO.GetByIdAsync(id);
+
+        if (author == null)
+            return NotFound();
+
+        await _authorDAO.UpdatePasswordAsync(
+            passwordUpdateInfo.Email,
+            passwordUpdateInfo.OldPassword,
+            passwordUpdateInfo.NewPassword);
+
+        return Ok();
     }
 }

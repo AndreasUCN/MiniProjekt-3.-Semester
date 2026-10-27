@@ -2,4 +2,5 @@
   <Project Path="BlogWebAPI/BlogWebAPI.csproj" Id="b0cb042e-756a-4313-bd4c-dc94713d93e2" />
   <Project Path="DataAccess/DataAccess.csproj" />
   <Project Path="TestBlogSharp/TestBlogSharp.csproj" />
+  <Project Path="WebApiClient/WebApiClient.csproj" Id="9a66e98b-3c19-49a4-9466-8ef35439f571" />
 </Solution>
