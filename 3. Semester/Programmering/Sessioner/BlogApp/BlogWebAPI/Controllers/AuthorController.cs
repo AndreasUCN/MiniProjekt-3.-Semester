@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using BlogWebAPI.DTO;
 using System.Runtime.InteropServices;
 
 namespace YourProject.Controllers;
@@ -43,8 +44,6 @@ public class AuthorsController : ControllerBase
     public async Task<ActionResult> UpdatePassword(int id, [FromBody] AuthorDto passwordUpdateInfo)
     {
         throw new NotImplementedException();
-
-    }
 
     }
 }

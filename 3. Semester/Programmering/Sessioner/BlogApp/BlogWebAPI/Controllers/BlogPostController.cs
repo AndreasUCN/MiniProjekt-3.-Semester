@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using BlogWebAPI.DTO;
 using System.Runtime.InteropServices;
 
 namespace YourProject.Controllers;
