@@ -1,13 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogWebAPI.DTO;
+using DataAccess.Repositories;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Configuration;
 
-namespace YourProject.Controllers;
+namespace BlogWebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class AuthorsController : ControllerBase
 {
+    IAuthorDAO _authorDAO;
+
+    public AuthorsController(IConfiguration configuration)
+    {
+        _authorDAO = new AuthorDAO(configuration.GetConnectionString("DefaultConnection"));
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAuthor(int id)
     {
@@ -21,7 +30,7 @@ public class AuthorsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AuthorDto>>> Get()
+    public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAsync()
     {
         throw new NotImplementedException();
     }

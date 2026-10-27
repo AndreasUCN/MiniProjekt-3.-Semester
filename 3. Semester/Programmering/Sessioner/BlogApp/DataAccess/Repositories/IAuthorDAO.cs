@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataAccess.Repositories
 {
-    internal interface IAuthorDAO
+    public interface IAuthorDAO
     {
         // Opret et nyt forfatter
         Task<int> CreateAsync(Author entity, string password);
