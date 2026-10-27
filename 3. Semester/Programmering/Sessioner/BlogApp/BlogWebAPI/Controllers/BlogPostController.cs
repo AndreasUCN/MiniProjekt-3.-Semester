@@ -25,5 +25,15 @@ public class BlogPostController : ControllerBase
         throw new NotImplementedException();
     }
 
+    [HttpPost]
+    public async Task<ActionResult> Post([FromBody] BlogPostDto newBlogPostDto)
+    {
+        throw new NotImplementedException();
+    }
 
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Put(int id, [FromBody] BlogPostDto blogPostDtoToUpdate)
+    {
+        throw new NotImplementedException();
+    }   
 }

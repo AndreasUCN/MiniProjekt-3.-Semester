@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 
-namespace DataAccess.Controllers
+namespace YourProject.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class LoginsController : ControllerBase
 {
-    internal class LoginsController
+    [HttpPost]
+    public async Task<ActionResult<int>> Post([FromBody] AuthorDto loginvalues)
     {
+        throw new NotImplementedException();
     }
+
 }
